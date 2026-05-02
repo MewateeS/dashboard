@@ -9,7 +9,8 @@ interface TaskCardProps {
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
-  const assigneeColors: Record<AgentId, { color: string, border: string, name: string, sprite: AgentId }> = {
+  type SpriteId = 'overowa' | 'firefly' | 'stinger';
+  const assigneeColors: Record<AgentId, { color: string, border: string, name: string, sprite: SpriteId }> = {
     overowa: { color: 'text-yellowBright', border: 'border-yellowBright', name: 'OverOwa', sprite: 'overowa' },
     firefly: { color: 'text-greenBright', border: 'border-greenBright', name: 'Firefly', sprite: 'firefly' },
     stinger: { color: 'text-amberBright', border: 'border-amberBright', name: 'Stinger', sprite: 'stinger' },
