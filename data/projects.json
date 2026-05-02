@@ -1,0 +1,26 @@
+{
+  "projects": [
+    {
+      "id": "p1",
+      "name": "Core Infrastructure",
+      "description": "Setting up the base system, types, and routing for Mission Control.",
+      "status": "active",
+      "taskIds": ["t1", "t3"],
+      "owner": "overowa",
+      "color": "#3b82f6",
+      "created": "2026-05-01T00:00:00Z",
+      "updated": "2026-05-02T06:00:00Z"
+    },
+    {
+      "id": "p2",
+      "name": "UI/UX Refinement",
+      "description": "Polishing the look and feel of the dashboard and specialized screens.",
+      "status": "planning",
+      "taskIds": ["t2", "t4"],
+      "owner": "stinger",
+      "color": "#10b981",
+      "created": "2026-05-01T00:00:00Z",
+      "updated": "2026-05-02T06:00:00Z"
+    }
+  ]
+}

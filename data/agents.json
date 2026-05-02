@@ -1,0 +1,22 @@
+[
+  {
+    "name": "OverOwa",
+    "model": "gemma4:31b-cloud",
+    "status": "routing to: Firefly",
+    "role": "Chief of Staff"
+  },
+  {
+    "name": "Firefly",
+    "model": "claude-3.5-sonnet",
+    "status": "active",
+    "role": "Coder",
+    "lastActive": "2 minutes ago"
+  },
+  {
+    "name": "Stinger",
+    "model": "gemma4:31b-cloud",
+    "status": "idle",
+    "role": "Researcher",
+    "lastActive": "just now"
+  }
+]

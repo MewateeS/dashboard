@@ -1,0 +1,28 @@
+{
+  "tasks": [
+    {
+      "id": "t4",
+      "title": "Add Task Button functionality",
+      "description": "Implement the top-right button to drop new tasks into the backlog column.",
+      "status": "done",
+      "assignee": "me",
+      "priority": "normal",
+      "tags": [
+        "#ui"
+      ],
+      "created": "2026-05-01T15:00:00Z",
+      "updated": "2026-05-02T14:48:51.863Z"
+    },
+    {
+      "id": "d03ec080-3a60-4191-83bc-f10ae61ae174",
+      "title": "First Task",
+      "description": "Sleep",
+      "assignee": "me",
+      "priority": "normal",
+      "status": "done",
+      "tags": [],
+      "created": "2026-05-02T14:54:18.061Z",
+      "updated": "2026-05-02T14:54:21.303Z"
+    }
+  ]
+}

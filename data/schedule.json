@@ -1,0 +1,40 @@
+{
+  "schedules": [
+    {
+      "id": "cron-1",
+      "agent": "overowa",
+      "name": "Vibe Check",
+      "type": "daily",
+      "status": "active",
+      "cron": "0 9 * * *",
+      "timezone": "UTC",
+      "prompt_preview": "Check in with Boss to see how things are going and rotate heartbeat tasks.",
+      "next_run": "2026-05-02T09:00:00Z",
+      "last_run": "2026-05-01T09:00:00Z"
+    },
+    {
+      "id": "cron-2",
+      "agent": "firefly",
+      "name": "Code Audit",
+      "type": "recurring",
+      "status": "active",
+      "cron": "0 18 * * 1",
+      "timezone": "UTC",
+      "prompt_preview": "Audit the weekly commits for technical debt and accessibility gaps.",
+      "next_run": "2026-05-04T18:00:00Z",
+      "last_run": "2026-04-28T18:00:00Z"
+    },
+    {
+      "id": "cron-3",
+      "agent": "stinger",
+      "name": "Trend Analysis",
+      "type": "one-shot",
+      "status": "disabled",
+      "cron": "0 12 15 5 *",
+      "timezone": "UTC",
+      "prompt_preview": "Analyze Q2 AI trends and prepare a brief for the Founder.",
+      "next_run": "2026-05-15T12:00:00Z",
+      "last_run": null
+    }
+  ]
+}
