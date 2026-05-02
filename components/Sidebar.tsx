@@ -35,23 +35,31 @@ const AGENTS = [
 
 type BotStatus = 'checking' | 'online' | 'offline';
 
+const HEARTBEAT_TIMEOUT_MS = 60_000;
+
 function useBotStatus(): BotStatus {
   const [status, setStatus] = useState<BotStatus>('checking');
 
   useEffect(() => {
     let cancelled = false;
 
-    async function ping() {
+    async function check() {
       try {
-        await fetch('http://localhost:18789/', { mode: 'no-cors' });
-        if (!cancelled) setStatus('online');
+        const res = await fetch('/api/heartbeat');
+        const { ts } = await res.json();
+        if (cancelled) return;
+        if (ts && Date.now() - ts < HEARTBEAT_TIMEOUT_MS) {
+          setStatus('online');
+        } else {
+          setStatus('offline');
+        }
       } catch {
         if (!cancelled) setStatus('offline');
       }
     }
 
-    ping();
-    const interval = setInterval(ping, 30_000);
+    check();
+    const interval = setInterval(check, 20_000);
     return () => {
       cancelled = true;
       clearInterval(interval);
@@ -153,7 +161,7 @@ const Sidebar: React.FC = () => {
       {/* Footer port indicator */}
       <div className="px-4 py-3 border-t border-border flex items-center gap-2">
         <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-500 ${dotColor}`} />
-        <span className="text-[9px] text-smoke opacity-50 font-mono">:18789</span>
+        <span className="text-[9px] text-smoke opacity-50 font-mono">bot heartbeat</span>
       </div>
     </aside>
   );
