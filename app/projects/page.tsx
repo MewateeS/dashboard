@@ -4,7 +4,7 @@ import { Project } from '@/types';
 import projectsData from '@/data/projects.json';
 
 export default function ProjectsPage() {
-  const projects: Project[] = projectsData.projects;
+  const projects = projectsData.projects as Project[];
 
   return (
     <div className="p-6 max-w-6xl mx-auto">

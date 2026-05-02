@@ -8,7 +8,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   const project = projectsData.projects.find((p) => p.id === params.id) as Project | undefined;
   if (!project) notFound();
 
-  const tasks = tasksData.tasks as Task[];
+  const tasks = (tasksData as { tasks: Task[] }).tasks;
   const linkedTasks = tasks.filter(t => project.taskIds.includes(t.id));
   const completedTasks = linkedTasks.filter(t => t.status === 'done').length;
   const progress = linkedTasks.length > 0
