@@ -20,7 +20,16 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Trash2, X } from 'lucide-react';
 import TaskCard from '@/components/TaskCard';
+import PixelSprite from '@/components/sprites/PixelSprite';
 import { Task, TaskStatus, AgentId, TaskPriority } from '@/types';
+
+type SpriteId = 'overowa' | 'firefly' | 'stinger';
+const AGENTS: { id: AgentId; label: string; sprite: SpriteId; color: string }[] = [
+  { id: 'me',      label: 'Me',      sprite: 'overowa', color: 'border-smoke text-smoke' },
+  { id: 'overowa', label: 'OverOwa', sprite: 'overowa', color: 'border-yellowBright text-yellowBright' },
+  { id: 'firefly', label: 'Firefly', sprite: 'firefly', color: 'border-greenBright text-greenBright' },
+  { id: 'stinger', label: 'Stinger', sprite: 'stinger', color: 'border-amberBright text-amberBright' },
+];
 
 const FIELD = "w-full bg-base border border-border px-3 py-2 text-[12px] text-white font-mono outline-none focus:border-smoke transition-colors rounded";
 
@@ -78,23 +87,31 @@ function AddTaskModal({ onClose, onAdd }: { onClose: () => void; onAdd: (task: T
           <textarea className={`${FIELD} resize-none`} rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-[10px] uppercase text-smoke mb-1">Assignee</label>
-            <select className={FIELD} value={form.assignee} onChange={e => setForm(f => ({ ...f, assignee: e.target.value as AgentId }))}>
-              {(['me', 'overowa', 'firefly', 'stinger'] as AgentId[]).map(a => (
-                <option key={a} value={a}>{a}</option>
-              ))}
-            </select>
+        <div>
+          <label className="block text-[10px] uppercase text-smoke mb-2">Assignee</label>
+          <div className="flex gap-2">
+            {AGENTS.map(a => (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => setForm(f => ({ ...f, assignee: a.id }))}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded border transition-all flex-1
+                  ${form.assignee === a.id ? `${a.color} bg-raised border-2` : 'border-border text-smoke hover:border-smoke'}`}
+              >
+                <PixelSprite agentId={a.sprite} className="w-6 h-6" />
+                <span className="text-[9px] uppercase font-bold">{a.label}</span>
+              </button>
+            ))}
           </div>
-          <div>
-            <label className="block text-[10px] uppercase text-smoke mb-1">Priority</label>
-            <select className={FIELD} value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value as TaskPriority }))}>
-              {(['urgent', 'normal', 'low'] as TaskPriority[]).map(p => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-          </div>
+        </div>
+
+        <div>
+          <label className="block text-[10px] uppercase text-smoke mb-1">Priority</label>
+          <select className={FIELD} value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value as TaskPriority }))}>
+            {(['urgent', 'normal', 'low'] as TaskPriority[]).map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
         </div>
 
         <div>

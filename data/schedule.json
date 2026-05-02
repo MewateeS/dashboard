@@ -1,18 +1,6 @@
 {
   "schedules": [
     {
-      "id": "cron-1",
-      "agent": "overowa",
-      "name": "Vibe Check",
-      "type": "daily",
-      "status": "active",
-      "cron": "0 9 * * *",
-      "timezone": "UTC",
-      "prompt_preview": "Check in with Boss to see how things are going and rotate heartbeat tasks.",
-      "next_run": "2026-05-02T09:00:00Z",
-      "last_run": "2026-05-01T09:00:00Z"
-    },
-    {
       "id": "cron-2",
       "agent": "firefly",
       "name": "Code Audit",
@@ -37,4 +25,5 @@
       "last_run": null
     }
   ]
+}
 }

@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -27,8 +27,48 @@ const COLORS: Record<string, string> = {
   projects: 'border-emberGlow text-emberGlow',
 };
 
+const AGENTS = [
+  { label: 'OVEROWA', color: 'bg-yellowBright' },
+  { label: 'FIREFLY', color: 'bg-greenBright' },
+  { label: 'STINGER', color: 'bg-amberBright' },
+];
+
+type BotStatus = 'checking' | 'online' | 'offline';
+
+function useBotStatus(): BotStatus {
+  const [status, setStatus] = useState<BotStatus>('checking');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function ping() {
+      try {
+        await fetch('http://localhost:18789/', { mode: 'no-cors' });
+        if (!cancelled) setStatus('online');
+      } catch {
+        if (!cancelled) setStatus('offline');
+      }
+    }
+
+    ping();
+    const interval = setInterval(ping, 30_000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  return status;
+}
+
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const botStatus = useBotStatus();
+
+  const dotColor =
+    botStatus === 'online'   ? 'bg-greenBright shadow-[0_0_6px_#4ade80]' :
+    botStatus === 'offline'  ? 'bg-emberGlow' :
+    'bg-smoke animate-pulse';
 
   return (
     <aside className="w-[220px] h-screen bg-surface border-r border-border flex flex-col font-mono text-white">
@@ -40,25 +80,33 @@ const Sidebar: React.FC = () => {
         <span className="text-[11px] font-bold tracking-wider">MISSION CONTROL</span>
       </div>
 
-      {/* Agent Status Lines */}
-      <div className="px-4 py-6 space-y-2">
-        <div className="flex items-center gap-2 text-[11px] text-smoke">
-          <div className="w-2 h-2 rounded-full bg-yellowBright" />
-          <span>OVEROWA ONLINE</span>
+      {/* Bot Status */}
+      <div className="px-4 py-4 border-b border-border space-y-2">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[9px] uppercase tracking-widest text-smoke opacity-50">Bot Process</span>
+          <span className={`text-[9px] uppercase font-bold tracking-widest ${
+            botStatus === 'online' ? 'text-greenBright' :
+            botStatus === 'offline' ? 'text-emberGlow' : 'text-smoke'
+          }`}>
+            {botStatus === 'checking' ? '…' : botStatus}
+          </span>
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-smoke">
-          <div className="w-2 h-2 rounded-full bg-greenBright" />
-          <span>FIREFLY ONLINE</span>
-        </div>
-        <div className="flex items-center gap-2 text-[11px] text-smoke">
-          <div className="w-2 h-2 rounded-full bg-amberBright" />
-          <span>STINGER ONLINE</span>
-        </div>
+
+        {AGENTS.map(a => (
+          <div key={a.label} className="flex items-center gap-2 text-[11px] text-smoke">
+            <div className={`w-2 h-2 rounded-full flex-shrink-0 transition-all duration-500 ${
+              botStatus === 'online' ? a.color : botStatus === 'offline' ? 'bg-emberGlow/40' : 'bg-smoke/30 animate-pulse'
+            }`} />
+            <span>{a.label}</span>
+            {botStatus === 'offline' && (
+              <span className="text-[9px] text-emberGlow ml-auto">OFF</span>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-0 py-2">
-        {/* Home */}
         <Link
           href="/"
           className={`w-full flex items-center justify-between px-4 py-3 transition-all group
@@ -101,6 +149,12 @@ const Sidebar: React.FC = () => {
           );
         })}
       </nav>
+
+      {/* Footer port indicator */}
+      <div className="px-4 py-3 border-t border-border flex items-center gap-2">
+        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-500 ${dotColor}`} />
+        <span className="text-[9px] text-smoke opacity-50 font-mono">:18789</span>
+      </div>
     </aside>
   );
 };
