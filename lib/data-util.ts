@@ -1,36 +1,46 @@
-import { Redis } from '@upstash/redis';
+import { createClient } from 'redis';
 import fs from 'fs/promises';
 import path from 'path';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
-const redis = process.env.UPSTASH_REDIS_REST_URL
-  ? new Redis({
-      url:   process.env.UPSTASH_REDIS_REST_URL!,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    })
-  : null;
+let _client: ReturnType<typeof createClient> | null = null;
+
+async function getRedis() {
+  if (!process.env.REDIS_URL) return null;
+  if (!_client || !_client.isOpen) {
+    _client = createClient({ url: process.env.REDIS_URL });
+    _client.on('error', () => { _client = null; });
+    await _client.connect();
+  }
+  return _client;
+}
 
 export const dataStore = {
   async get(key: string) {
+    const redis = await getRedis();
     if (redis) {
-      return await redis.get(key);
+      const val = await redis.get(key);
+      return val ? JSON.parse(val) : null;
     }
     const filePath = path.join(DATA_DIR, `${key}.json`);
     try {
-      const content = await fs.readFile(filePath, 'utf-8');
-      return JSON.parse(content);
+      return JSON.parse(await fs.readFile(filePath, 'utf-8'));
     } catch {
       return null;
     }
   },
 
   async set(key: string, value: unknown) {
+    const redis = await getRedis();
     if (redis) {
-      await redis.set(key, value);
+      await redis.set(key, JSON.stringify(value));
     } else {
-      const filePath = path.join(DATA_DIR, `${key}.json`);
-      await fs.writeFile(filePath, JSON.stringify(value, null, 2), 'utf-8');
+      await fs.writeFile(
+        path.join(DATA_DIR, `${key}.json`),
+        JSON.stringify(value, null, 2),
+        'utf-8'
+      );
     }
   },
 
