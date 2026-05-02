@@ -35,7 +35,7 @@ const AGENTS = [
 
 type BotStatus = 'checking' | 'online' | 'offline';
 
-const HEARTBEAT_TIMEOUT_MS = 60_000;
+const HEARTBEAT_TIMEOUT_MS = 90_000;
 
 function useBotStatus(): BotStatus {
   const [status, setStatus] = useState<BotStatus>('checking');

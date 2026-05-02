@@ -1,23 +1,19 @@
-# Checks if the bot is alive at localhost:18789 and pushes status to Vercel.
-# Edit VERCEL_URL before running.
-
 $VERCEL_URL = "https://owa-mission.vercel.app"
-$BOT_URL    = "http://localhost:18789/"
-$INTERVAL   = 30   # seconds
-# Set this to match HEARTBEAT_SECRET in your Vercel env vars
+$INTERVAL   = 30
 $SECRET     = $env:HEARTBEAT_SECRET
 
-Write-Host "Heartbeat watcher started — polling $BOT_URL every ${INTERVAL}s"
+Write-Host "Heartbeat started -> $VERCEL_URL/api/heartbeat"
+Write-Host "Press Ctrl+C to stop (bot will show offline after 90s)"
+Write-Host ""
 
 while ($true) {
     try {
-        $null = Invoke-WebRequest -Uri $BOT_URL -TimeoutSec 3 -ErrorAction Stop
-        $headers = @{}
+        $headers = @{ "Content-Type" = "application/json" }
         if ($SECRET) { $headers["x-heartbeat-secret"] = $SECRET }
-        Invoke-RestMethod -Uri "$VERCEL_URL/api/heartbeat" -Method POST -Headers $headers | Out-Null
-        Write-Host "$(Get-Date -Format 'HH:mm:ss')  bot ONLINE — heartbeat sent"
+        $res = Invoke-RestMethod -Uri "$VERCEL_URL/api/heartbeat" -Method POST -Headers $headers
+        Write-Host "$(Get-Date -Format 'HH:mm:ss')  OK  ts=$($res.ts)"
     } catch {
-        Write-Host "$(Get-Date -Format 'HH:mm:ss')  bot OFFLINE — no heartbeat sent"
+        Write-Host "$(Get-Date -Format 'HH:mm:ss')  FAILED: $($_.Exception.Message)"
     }
     Start-Sleep -Seconds $INTERVAL
 }
