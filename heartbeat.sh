@@ -6,11 +6,10 @@ APP_URL="${APP_URL:-https://owa-mission.vercel.app}"
 INTERVAL=30
 
 OPENCLAW_URL="http://$OPENCLAW_HOST:$OPENCLAW_PORT"
-HEARTBEAT_FILE="public/heartbeat.json"
 
 echo "Heartbeat monitor started"
 echo "  Openclaw: $OPENCLAW_URL"
-echo "  Heartbeat file: $HEARTBEAT_FILE"
+echo "  App: $APP_URL"
 echo ""
 
 while true; do
@@ -21,14 +20,15 @@ while true; do
         found=1
     fi
 
-    # Write heartbeat timestamp to file
-    ts=$(date +%s)000
-    echo "{\"ts\":$ts,\"online\":true}" > "$HEARTBEAT_FILE"
+    # POST heartbeat to app
+    response=$(curl -s -X POST "$APP_URL/api/heartbeat" \
+        -H "Content-Type: application/json" \
+        -d "{}")
 
     if [ $found -eq 1 ]; then
-        echo "$(date '+%H:%M:%S')  ✓ Online"
+        echo "$(date '+%H:%M:%S')  ✓ Online - $response"
     else
-        echo "$(date '+%H:%M:%S')  ✓ Heartbeat sent (openclaw offline)"
+        echo "$(date '+%H:%M:%S')  ✓ Posted - $response"
     fi
 
     sleep $INTERVAL
