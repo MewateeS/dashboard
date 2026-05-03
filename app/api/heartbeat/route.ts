@@ -24,11 +24,18 @@ async function checkOpenclawOnline(): Promise<boolean> {
 
 export async function GET() {
   try {
-    const isOnline = await checkOpenclawOnline();
-
-    if (isOnline) {
-      const ts = Date.now();
-      return NextResponse.json({ ts, source: 'openclaw', online: true });
+    // Try to read from public/heartbeat.json (written by heartbeat.sh)
+    try {
+      const filePath = new URL('../../../public/heartbeat.json', import.meta.url);
+      const response = await fetch(filePath);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.ts && Date.now() - data.ts < 90000) {
+          return NextResponse.json({ ts: data.ts, online: true, source: 'heartbeat-script' });
+        }
+      }
+    } catch {
+      // File not available or parse error
     }
 
     // Fallback to stored data (for local dev)
