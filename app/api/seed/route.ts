@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
+import { checkBotAuth } from '@/lib/auth';
 import tasksData    from '@/data/tasks.json';
 import projectsData from '@/data/projects.json';
 import scheduleData from '@/data/schedule.json';
@@ -9,6 +10,8 @@ import missionData  from '@/data/mission.json';
 // POST /api/seed  — seeds KV with initial data (skips keys that already exist)
 // POST /api/seed?force=true  — overwrites everything
 export async function POST(request: Request) {
+  const denied = checkBotAuth(request);
+  if (denied) return denied;
   const { searchParams } = new URL(request.url);
   const force = searchParams.get('force') === 'true';
 
