@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 import { TaskData, TaskStatus, AgentId, TaskPriority } from '@/types';
+import { checkBotAuth } from '@/lib/auth';
 
 const VALID_STATUSES:   TaskStatus[]   = ['backlog', 'in-progress', 'done'];
 const VALID_ASSIGNEES:  AgentId[]      = ['overowa', 'firefly', 'stinger', 'me'];
@@ -11,6 +12,8 @@ async function readData(): Promise<TaskData> {
 }
 
 export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+  const denied = checkBotAuth(_request);
+  if (denied) return denied;
   try {
     const data = await readData();
     const index = data.tasks.findIndex(t => t.id === params.id);
@@ -25,6 +28,8 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
+  const denied = checkBotAuth(request);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const data = await readData();

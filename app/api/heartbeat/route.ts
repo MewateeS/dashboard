@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
+import { checkBotAuth } from '@/lib/auth';
 
 const OPENCLAW_HOST = process.env.OPENCLAW_HOST || '192.168.223.48';
 const OPENCLAW_PORT = process.env.OPENCLAW_PORT || '18789';
@@ -37,13 +38,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const expected = process.env.HEARTBEAT_SECRET;
-  if (expected) {
-    const secret = req.headers.get('x-heartbeat-secret');
-    if (secret !== expected) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-  }
+  const denied = checkBotAuth(req);
+  if (denied) return denied;
   const ts = Date.now();
   try {
     await dataStore.set('heartbeat', { ts, source: 'heartbeat-script', online: true });

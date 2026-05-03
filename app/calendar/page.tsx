@@ -51,8 +51,17 @@ type Schedule = {
 
 const BLANK_FORM = { name: '', agent: 'overowa', type: 'daily', cron: '', prompt_preview: '', next_run: '' };
 
-function AddModal({ onClose, onAdd }: { onClose: () => void; onAdd: (s: Schedule) => void }) {
-  const [form, setForm] = useState(BLANK_FORM);
+function AddModal({ onClose, onAdd, selectedDate }: { onClose: () => void; onAdd: (s: Schedule) => void; selectedDate: Date | null }) {
+  const getInitialNextRun = () => {
+    if (selectedDate) {
+      const d = new Date(selectedDate);
+      d.setHours(9, 0, 0, 0);
+      return d.toISOString();
+    }
+    return BLANK_FORM.next_run;
+  };
+
+  const [form, setForm] = useState({ ...BLANK_FORM, next_run: getInitialNextRun() });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -247,6 +256,7 @@ export default function CalendarPage() {
         <AddModal
           onClose={() => setShowAdd(false)}
           onAdd={s => setSchedules(prev => [...prev, s])}
+          selectedDate={selected}
         />
       )}
 
@@ -307,8 +317,17 @@ export default function CalendarPage() {
 
         {selected && (
           <div className="mt-6 border-t border-border pt-4">
-            <div className="text-xs uppercase text-smoke opacity-60 mb-3 tracking-widest">
-              {MONTHS[selected.getMonth()]} {selected.getDate()}, {selected.getFullYear()}
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs uppercase text-smoke opacity-60 tracking-widest">
+                {MONTHS[selected.getMonth()]} {selected.getDate()}, {selected.getFullYear()}
+              </span>
+              <button
+                onClick={() => setShowAdd(true)}
+                className="text-xs text-smoke hover:text-white border border-border rounded px-2 py-1 hover:border-smoke transition-all"
+                title="Add schedule for this date"
+              >
+                +Add
+              </button>
             </div>
             {selectedEvents.length === 0 ? (
               <div className="text-smoke opacity-40 text-sm">No events</div>

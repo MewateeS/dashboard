@@ -23,6 +23,7 @@ while true; do
     # POST heartbeat to app
     response=$(curl -s -X POST "$APP_URL/api/heartbeat" \
         -H "Content-Type: application/json" \
+        -H "x-bot-secret: ${BOT_SECRET}" \
         -d "{}")
 
     if [ $found -eq 1 ]; then

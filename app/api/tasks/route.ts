@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 import { TaskData, TaskStatus, AgentId, TaskPriority } from '@/types';
+import { checkBotAuth } from '@/lib/auth';
 
 const VALID_STATUSES:   TaskStatus[]   = ['backlog', 'in-progress', 'done'];
 const VALID_ASSIGNEES:  AgentId[]      = ['overowa', 'firefly', 'stinger', 'me'];
@@ -16,6 +17,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const denied = checkBotAuth(request);
+  if (denied) return denied;
   try {
     const body = await request.json();
 

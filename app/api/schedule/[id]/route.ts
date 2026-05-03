@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
+import { checkBotAuth } from '@/lib/auth';
 
 export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+  const denied = checkBotAuth(_req);
+  if (denied) return denied;
   try {
     const { id } = params;
     if (!id || !/^[\w-]+$/.test(id)) {

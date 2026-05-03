@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 import { ProjectData } from '@/types';
+import { checkBotAuth } from '@/lib/auth';
 
 const VALID_STATUSES = ['planning', 'active', 'completed', 'on-hold'] as const;
 const VALID_OWNERS   = ['overowa', 'firefly', 'stinger', 'me'] as const;
@@ -15,6 +16,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const denied = checkBotAuth(request);
+  if (denied) return denied;
   try {
     const body = await request.json();
     const data = (await dataStore.get('projects') as ProjectData) || { projects: [] };
