@@ -1,12 +1,40 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 
+const OPENCLAW_HOST = process.env.OPENCLAW_HOST || '192.168.223.115';
+const OPENCLAW_PORT = process.env.OPENCLAW_PORT || '18789';
+const OPENCLAW_URL = `http://${OPENCLAW_HOST}:${OPENCLAW_PORT}`;
+
 export async function GET() {
   try {
-    const data = await dataStore.get('heartbeat') as { ts: number } | null;
-    return NextResponse.json({ ts: data?.ts ?? null });
+    const endpoints = [`${OPENCLAW_URL}/healthz`, `${OPENCLAW_URL}/api/status`, `${OPENCLAW_URL}/health`];
+
+    for (const endpoint of endpoints) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+
+        if (response.ok) {
+          const ts = Date.now();
+          await dataStore.set('heartbeat', { ts, source: 'openclaw' });
+          return NextResponse.json({ ts, source: 'openclaw', endpoint });
+        }
+      } catch (fetchError) {
+        // Continue to next endpoint
+      }
+    }
+
+    // Return last known timestamp
+    const data = await dataStore.get('heartbeat') as { ts: number; source?: string } | null;
+    return NextResponse.json({ ts: data?.ts ?? null, source: data?.source ?? 'offline' });
   } catch {
-    return NextResponse.json({ ts: null });
+    return NextResponse.json({ ts: null, source: 'error' });
   }
 }
 
@@ -19,6 +47,6 @@ export async function POST(req: Request) {
     }
   }
   const ts = Date.now();
-  await dataStore.set('heartbeat', { ts });
-  return NextResponse.json({ ok: true, ts });
+  await dataStore.set('heartbeat', { ts, source: 'local' });
+  return NextResponse.json({ ok: true, ts, source: 'local' });
 }
