@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 
-const OPENCLAW_HOST = process.env.OPENCLAW_HOST || '192.168.223.115';
+const OPENCLAW_HOST = process.env.OPENCLAW_HOST || '192.168.223.48';
 const OPENCLAW_PORT = process.env.OPENCLAW_PORT || '18789';
 const OPENCLAW_URL = `http://${OPENCLAW_HOST}:${OPENCLAW_PORT}`;
 
