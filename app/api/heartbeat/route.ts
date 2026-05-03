@@ -26,8 +26,10 @@ export async function GET() {
   try {
     // Try to read from public/heartbeat.json (written by heartbeat.sh)
     try {
-      const filePath = new URL('../../../public/heartbeat.json', import.meta.url);
-      const response = await fetch(filePath);
+      const origin = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : 'http://localhost:3000';
+      const response = await fetch(`${origin}/heartbeat.json`, { cache: 'no-store' });
       if (response.ok) {
         const data = await response.json();
         if (data.ts && Date.now() - data.ts < 90000) {
