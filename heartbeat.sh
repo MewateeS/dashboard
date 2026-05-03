@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPENCLAW_HOST="${OPENCLAW_HOST:-192.168.223.48}"
+OPENCLAW_HOST="${OPENCLAW_HOST:-localhost}"
 OPENCLAW_PORT="${OPENCLAW_PORT:-18789}"
 APP_URL="${APP_URL:-https://owa-mission.vercel.app}"
 INTERVAL=30
