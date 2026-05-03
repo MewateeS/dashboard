@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 import { ProjectData } from '@/types';
-import { checkBotAuth } from '@/lib/auth';
-
 const VALID_STATUSES = ['planning', 'active', 'completed', 'on-hold'] as const;
 const VALID_OWNERS   = ['overowa', 'firefly', 'stinger', 'me'] as const;
 
@@ -18,8 +16,6 @@ export async function GET(_request: Request, { params }: { params: { id: string 
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const denied = checkBotAuth(request);
-  if (denied) return denied;
   try {
     const body = await request.json();
     const data = (await dataStore.get('projects') as ProjectData) || { projects: [] };
@@ -46,8 +42,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
-  const denied = checkBotAuth(_request);
-  if (denied) return denied;
   try {
     const { id } = params;
     if (!id || !/^[\w-]+$/.test(id)) {

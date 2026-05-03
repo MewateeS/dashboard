@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
-import { checkBotAuth } from '@/lib/auth';
 
 const VALID_AGENTS = ['overowa', 'firefly', 'stinger'] as const;
 const VALID_TYPES = ['daily', 'recurring', 'one-shot'] as const;
@@ -15,8 +14,6 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const denied = checkBotAuth(req);
-  if (denied) return denied;
   try {
     const body = await req.json();
 
