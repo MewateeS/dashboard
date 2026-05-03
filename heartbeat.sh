@@ -18,17 +18,22 @@ echo ""
 while true; do
     found=0
 
-    for endpoint in "$OPENCLAW_URL/healthz" "$OPENCLAW_URL/api/status" "$OPENCLAW_URL/health"; do
-        if timeout $TIMEOUT curl -s "$endpoint" > /dev/null 2>&1; then
-            curl -s -X POST "$HEARTBEAT_URL" -H "Content-Type: application/json" > /dev/null 2>&1
-            echo "$(date '+%H:%M:%S')  ✓ Online"
-            found=1
-            break
-        fi
-    done
+    # Try to reach openclaw
+    if curl -s --max-time $TIMEOUT "$OPENCLAW_URL/health" > /dev/null 2>&1; then
+        found=1
+    elif curl -s --max-time $TIMEOUT "$OPENCLAW_URL/api/status" > /dev/null 2>&1; then
+        found=1
+    elif curl -s --max-time $TIMEOUT "$OPENCLAW_URL/healthz" > /dev/null 2>&1; then
+        found=1
+    fi
 
-    if [ $found -eq 0 ]; then
-        echo "$(date '+%H:%M:%S')  ✗ Openclaw unreachable"
+    # Send heartbeat
+    if [ $found -eq 1 ]; then
+        response=$(curl -s -X POST "$HEARTBEAT_URL" -H "Content-Type: application/json")
+        echo "$(date '+%H:%M:%S')  ✓ Online - $response"
+    else
+        response=$(curl -s -X POST "$HEARTBEAT_URL" -H "Content-Type: application/json")
+        echo "$(date '+%H:%M:%S')  ✗ Openclaw offline - Posted anyway"
     fi
 
     sleep $INTERVAL
