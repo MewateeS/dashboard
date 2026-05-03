@@ -1,4 +1,4 @@
-$APP_URL = "http://localhost:3001/api/heartbeat"
+$APP_URL = "https://owa-mission.vercel.app/api/heartbeat"
 $INTERVAL = 30
 
 Write-Host "Heartbeat monitor started at $APP_URL"

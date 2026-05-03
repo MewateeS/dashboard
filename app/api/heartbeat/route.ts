@@ -5,36 +5,45 @@ const OPENCLAW_HOST = process.env.OPENCLAW_HOST || '192.168.223.115';
 const OPENCLAW_PORT = process.env.OPENCLAW_PORT || '18789';
 const OPENCLAW_URL = `http://${OPENCLAW_HOST}:${OPENCLAW_PORT}`;
 
+async function checkOpenclawOnline(): Promise<boolean> {
+  const endpoints = [`${OPENCLAW_URL}/healthz`, `${OPENCLAW_URL}/api/status`, `${OPENCLAW_URL}/health`];
+
+  for (const endpoint of endpoints) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+      const response = await fetch(endpoint, { method: 'GET', signal: controller.signal });
+      clearTimeout(timeout);
+      if (response.ok) return true;
+    } catch {
+      // Continue to next endpoint
+    }
+  }
+  return false;
+}
+
 export async function GET() {
   try {
-    const endpoints = [`${OPENCLAW_URL}/healthz`, `${OPENCLAW_URL}/api/status`, `${OPENCLAW_URL}/health`];
+    const isOnline = await checkOpenclawOnline();
 
-    for (const endpoint of endpoints) {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch(endpoint, {
-          method: 'GET',
-          signal: controller.signal,
-        });
-        clearTimeout(timeout);
-
-        if (response.ok) {
-          const ts = Date.now();
-          await dataStore.set('heartbeat', { ts, source: 'openclaw' });
-          return NextResponse.json({ ts, source: 'openclaw', endpoint });
-        }
-      } catch (fetchError) {
-        // Continue to next endpoint
-      }
+    if (isOnline) {
+      const ts = Date.now();
+      return NextResponse.json({ ts, source: 'openclaw', online: true });
     }
 
-    // Return last known timestamp
-    const data = await dataStore.get('heartbeat') as { ts: number; source?: string } | null;
-    return NextResponse.json({ ts: data?.ts ?? null, source: data?.source ?? 'offline' });
+    // Fallback to stored data (for local dev)
+    try {
+      const data = await dataStore.get('heartbeat') as { ts: number; source?: string } | null;
+      if (data?.ts && Date.now() - data.ts < 90000) {
+        return NextResponse.json({ ts: data.ts, source: data.source ?? 'cached', online: true });
+      }
+    } catch {
+      // dataStore not available
+    }
+
+    return NextResponse.json({ ts: null, source: 'offline', online: false });
   } catch {
-    return NextResponse.json({ ts: null, source: 'error' });
+    return NextResponse.json({ ts: null, source: 'error', online: false });
   }
 }
 
