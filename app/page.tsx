@@ -416,6 +416,84 @@ function CatSprite() {
   );
 }
 
+function TornadoSprite({ mode }: { mode: Mode }) {
+  const [d, l, md] = mode === 'winter'
+    ? ['#7ab0d0', '#a4cce4', '#c0dff2']
+    : mode === 'storm'
+    ? ['#080a10', '#10121a', '#181c26']
+    : ['#1c1e2e', '#2e3048', '#3a3c52'];
+  const debris = mode === 'winter' ? '#b0cce0' : '#6a5030';
+  return (
+    <svg width="120" height="290" viewBox="0 0 60 145" fill="none" style={{ imageRendering: 'pixelated', display: 'block' }}>
+      <rect x="0"  y="0"   width="60" height="12" fill={d}  opacity="0.93" />
+      <rect x="2"  y="12"  width="56" height="11" fill={l}  opacity="0.91" />
+      <rect x="5"  y="23"  width="50" height="11" fill={md} opacity="0.90" />
+      <rect x="8"  y="34"  width="44" height="10" fill={d}  opacity="0.91" />
+      <rect x="12" y="44"  width="36" height="10" fill={l}  opacity="0.92" />
+      <rect x="16" y="54"  width="28" height="9"  fill={md} opacity="0.93" />
+      <rect x="20" y="63"  width="20" height="9"  fill={d}  opacity="0.94" />
+      <rect x="23" y="72"  width="14" height="8"  fill={l}  opacity="0.95" />
+      <rect x="26" y="80"  width="8"  height="8"  fill={md} opacity="0.96" />
+      <rect x="28" y="88"  width="4"  height="8"  fill={d}  opacity="0.97" />
+      <rect x="29" y="96"  width="2"  height="16" fill={l}  opacity="0.98" />
+      {/* swirl stripes */}
+      <rect x="6"  y="8"   width="9"  height="2" fill={l}  opacity="0.45" />
+      <rect x="38" y="20"  width="8"  height="2" fill={l}  opacity="0.40" />
+      <rect x="10" y="30"  width="7"  height="2" fill={md} opacity="0.38" />
+      <rect x="33" y="42"  width="6"  height="2" fill={md} opacity="0.35" />
+      <rect x="15" y="51"  width="5"  height="2" fill={d}  opacity="0.30" />
+      <rect x="30" y="62"  width="4"  height="2" fill={d}  opacity="0.28" />
+      {/* debris */}
+      <rect x="3"  y="24"  width="5" height="4" fill={debris} opacity="0.80" />
+      <rect x="46" y="16"  width="4" height="3" fill={debris} opacity="0.75" />
+      <rect x="9"  y="48"  width="4" height="3" fill={debris} opacity="0.65" />
+      <rect x="40" y="40"  width="4" height="4" fill={debris} opacity="0.70" />
+      <rect x="17" y="64"  width="3" height="3" fill={debris} opacity="0.55" />
+      {mode === 'winter' && <>
+        <rect x="2"  y="5"  width="3" height="2" fill="#e8f6ff" opacity="0.7" />
+        <rect x="50" y="28" width="2" height="2" fill="#e8f6ff" opacity="0.6" />
+        <rect x="14" y="56" width="2" height="2" fill="#ddf0ff" opacity="0.55" />
+      </>}
+    </svg>
+  );
+}
+function BigMeteoriteSprite({ mode }: { mode: Mode }) {
+  const t1   = mode === 'winter' ? '#4898d8' : mode === 'storm' ? '#404870' : '#d83800';
+  const t2   = mode === 'winter' ? '#70b8f0' : mode === 'storm' ? '#606090' : '#f06000';
+  const t3   = mode === 'winter' ? '#98d4ff' : mode === 'storm' ? '#8080b0' : '#ffa020';
+  const t4   = mode === 'winter' ? '#c4ecff' : mode === 'storm' ? '#9898c8' : '#ffd040';
+  const r1   = mode === 'winter' ? '#2858a0' : mode === 'storm' ? '#181830' : '#5a2800';
+  const r2   = mode === 'winter' ? '#4878c0' : mode === 'storm' ? '#282850' : '#804010';
+  const r3   = mode === 'winter' ? '#6898e0' : mode === 'storm' ? '#383870' : '#ac6420';
+  const core = mode === 'winter' ? '#e0f8ff' : mode === 'storm' ? '#c0c0ff' : '#fff8b0';
+  return (
+    <svg width="100" height="280" viewBox="0 0 50 140" fill="none" style={{ imageRendering: 'pixelated', display: 'block' }}>
+      {/* long outer trail */}
+      <rect x="22" y="0"   width="6"  height="76" fill={t1} opacity="0.07" />
+      <rect x="21" y="8"   width="8"  height="64" fill={t1} opacity="0.11" />
+      <rect x="20" y="20"  width="10" height="50" fill={t2} opacity="0.17" />
+      <rect x="19" y="34"  width="12" height="36" fill={t2} opacity="0.24" />
+      <rect x="18" y="50"  width="14" height="24" fill={t3} opacity="0.34" />
+      <rect x="17" y="64"  width="16" height="14" fill={t4} opacity="0.50" />
+      {/* outer glow halo */}
+      <rect x="9"  y="72"  width="32" height="42" rx="14" fill={t4} opacity="0.16" />
+      <rect x="12" y="76"  width="26" height="34" rx="11" fill={t3} opacity="0.18" />
+      {/* rock outer shell */}
+      <rect x="14" y="82"  width="22" height="30" rx="8"  fill={r1} />
+      <rect x="15" y="80"  width="20" height="28" rx="7"  fill={r2} />
+      <rect x="16" y="78"  width="18" height="26" rx="6"  fill={r3} />
+      {/* crater pits */}
+      <rect x="18" y="84"  width="5"  height="4"  fill={r1} opacity="0.95" />
+      <rect x="27" y="90"  width="4"  height="4"  fill={r1} opacity="0.85" />
+      <rect x="17" y="92"  width="4"  height="3"  fill={r2} opacity="0.75" />
+      <rect x="24" y="98"  width="3"  height="3"  fill={r2} opacity="0.70" />
+      {/* blazing core */}
+      <rect x="18" y="79"  width="14" height="10" rx="3" fill={core} opacity="0.65" />
+      <rect x="20" y="80"  width="10" height="7"  rx="2" fill="#fff"  opacity="0.32" />
+    </svg>
+  );
+}
+
 /* ── ui widgets ──────────────────────────────────────────────────────── */
 function SpeechBubble({ text }: { text: string }) {
   return (
@@ -485,6 +563,32 @@ const STORM_BUBBLES: Record<HeldId, string[]> = {
   bear:    ['cozy inside', 'thunder!', 'scared~'],
   dog:     ['scared!!', 'thunder!', 'woof!'],
   cat:     ['hate rain.', 'WET', 'inside pls'],
+};
+const DISASTER_BUBBLES: Record<NonNullable<Disaster>, Record<HeldId, string[]>> = {
+  freeze: {
+    overowa: ['FREEZING!!', 'systems frozen!', 'ICE!!'],
+    firefly: ['my circuits!!', 'COLD!!', 'frozen~'],
+    stinger: ['bzz-brr!!', 'ICE WAVE!!', 'COLD!'],
+    bear:    ['BRRR!!', 'too cold!', 'HIDE!!'],
+    dog:     ['AWOOO!!', 'cold paws!!', 'BRRR!!'],
+    cat:     ['HISS!!', 'COLD!!!', 'inside NOW'],
+  },
+  tornado: {
+    overowa: ['TORNADO!!', 'take cover!!', 'RUN!!'],
+    firefly: ['SPINNING!!', 'TOO WINDY!', 'HELP!!'],
+    stinger: ['BZZZZ!!', 'TOO WINDY!', 'RUN RUN!'],
+    bear:    ['WOAH!!', 'SCARY!!', 'RUN!!'],
+    dog:     ['BORKKK!!', 'WOAH!!', 'RUN RUN!!'],
+    cat:     ['NO!!', 'TORNADO!!', 'HIDE NOW!!'],
+  },
+  meteor: {
+    overowa: ['METEOR!!', 'INCOMING!!', 'EVACUATE!!'],
+    firefly: ['AHHH!!', 'METEOR!!', 'RUN!!'],
+    stinger: ['IMPACT!!', 'bzz FLEE!!', 'RUN!!'],
+    bear:    ['ROOAR!!', 'METEOR!!', 'RUN!!'],
+    dog:     ['WOOF WOOF!!', 'AWOOO!!', 'RUN!!'],
+    cat:     ['MRROW!!', 'SKY FALLING!!', 'FLEE!!'],
+  },
 };
 const MILESTONES: Record<number, string> = {
   5: '★ NICE CATCH! ★', 10: '★★ GREAT WORK ★★',
@@ -620,6 +724,55 @@ const STYLES = `
     92%  { opacity: 0.9; transform: translate(200px, 92px)  rotate(30deg); }
     100% { opacity: 0;   transform: translate(225px, 104px) rotate(30deg); }
   }
+  @keyframes freeze-sweep {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(320%); }
+  }
+  @keyframes freeze-bg {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    75%  { opacity: 0.7; }
+    100% { opacity: 0; }
+  }
+  @keyframes tornado-move {
+    0%   { transform: translateX(0px); }
+    100% { transform: translateX(calc(-110vw - 200px)); }
+  }
+  @keyframes tornado-sway {
+    0%, 100% { transform: skewX(-3deg) scaleX(0.95); }
+    50%       { transform: skewX(3deg)  scaleX(1.05); }
+  }
+  @keyframes big-meteor-fall {
+    0%   { opacity: 0; transform: translate(0, 0)               rotate(23deg); }
+    5%   { opacity: 1; transform: translate(0, 0)               rotate(23deg); }
+    100% { opacity: 1; transform: translate(-46vw, calc(108vh)) rotate(23deg); }
+  }
+  @keyframes impact-ring {
+    0%   { transform: scale(0.05); opacity: 1; }
+    40%  { opacity: 0.8; }
+    100% { transform: scale(14);   opacity: 0; }
+  }
+  @keyframes impact-ring2 {
+    0%   { transform: scale(0.1);  opacity: 0.6; }
+    100% { transform: scale(9);    opacity: 0; }
+  }
+  @keyframes crater-appear {
+    0%   { opacity: 0; transform: scaleX(0.2); }
+    60%  { opacity: 1; transform: scaleX(1); }
+    100% { opacity: 0.7; transform: scaleX(1); }
+  }
+  @keyframes scene-shake {
+    0%   { transform: translate(0,0); }
+    12%  { transform: translate(-9px,-5px); }
+    25%  { transform: translate(9px, 5px); }
+    37%  { transform: translate(-6px, 3px); }
+    50%  { transform: translate(6px,-3px); }
+    62%  { transform: translate(-3px,0); }
+    75%  { transform: translate(3px, 2px); }
+    87%  { transform: translate(-1px,0); }
+    100% { transform: translate(0,0); }
+  }
+  .scene-shaking { animation: scene-shake 0.55s ease-out forwards; }
   .agent-held  { animation: held-wobble 0.4s ease-in-out infinite !important; }
   .agent-shake { animation: held-shake  0.3s ease-in-out !important; }
   .agent-land  { animation: bounce-land 0.5s ease-out forwards !important; }
@@ -655,15 +808,21 @@ export default function Page() {
   const [popShroom,  setPopShroom]  = useState<number | null>(null);
   const [lightning,  setLightning]  = useState(false);
   const [shootStars, setShootStars] = useState<ShootStar[]>([]);
+  const [disaster,    setDisaster]    = useState<Disaster>(null);
+  const [mobsHidden,  setMobsHidden]  = useState(false);
+  const [impactFlash, setImpactFlash] = useState(false);
+  const [shakeScene,  setShakeScene]  = useState(false);
+  const [corrupted,   setCorrupted]   = useState<Set<HeldId>>(new Set());
 
-  const heldRef    = useRef<HeldId | null>(null);
-  const modeRef    = useRef<Mode>('night');
-  const prevMouse  = useRef({ x: 0, y: 0, t: 0 });
-  const shakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const objId      = useRef(0);
-  const flashId    = useRef(0);
-  const heartId    = useRef(0);
-  const shootId    = useRef(0);
+  const heldRef      = useRef<HeldId | null>(null);
+  const modeRef      = useRef<Mode>('night');
+  const prevMouse    = useRef({ x: 0, y: 0, t: 0 });
+  const shakeTimer   = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const disasterTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const objId        = useRef(0);
+  const flashId      = useRef(0);
+  const heartId      = useRef(0);
+  const shootId      = useRef(0);
 
   useEffect(() => { heldRef.current = held; }, [held]);
   useEffect(() => { modeRef.current = mode; }, [mode]);
@@ -737,6 +896,44 @@ export default function Page() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [held]);
+
+  /* disasters */
+  function triggerDisaster(type: NonNullable<Disaster>) {
+    if (disaster) return;
+    setDisaster(type);
+    setMobsHidden(true);
+    // all characters panic
+    const pool = DISASTER_BUBBLES[type];
+    (['overowa', 'firefly', 'stinger', 'bear', 'dog', 'cat'] as HeldId[]).forEach(id =>
+      triggerBubble(id, pool[id])
+    );
+    // meteor-specific: impact flash + screen shake at end of fall
+    if (type === 'meteor') {
+      setTimeout(() => {
+        setImpactFlash(true);
+        setShakeScene(true);
+        setTimeout(() => setImpactFlash(false), 650);
+        setTimeout(() => setShakeScene(false),  750);
+      }, 2700);
+    }
+    const dur = type === 'tornado' ? 9000 : 6000;
+    if (disasterTimer.current) clearTimeout(disasterTimer.current);
+    disasterTimer.current = setTimeout(() => {
+      setDisaster(null);
+      setMobsHidden(false);
+      // permanently corrupt every mob that wasn't being held (they don't return)
+      const survivor = heldRef.current;
+      const all: HeldId[] = ['overowa', 'firefly', 'stinger', 'bear', 'dog', 'cat'];
+      setCorrupted(prev => {
+        const next = new Set(prev);
+        all.forEach(id => { if (id !== survivor) next.add(id); });
+        return next;
+      });
+      const survivorMsg = survivor ? ` · ${survivor} survived` : '';
+      setMilestone(`☠ ALL CORRUPTED${survivorMsg} ☠`);
+      setTimeout(() => setMilestone(null), 3200);
+    }, dur);
+  }
 
   /* falling objects (stars / snowflakes / rain) */
   useEffect(() => {
@@ -839,22 +1036,137 @@ export default function Page() {
         <div style={{ position: 'fixed', inset: 0, background: '#e8f0ff', zIndex: 800, pointerEvents: 'none', animation: 'lightning-flash 0.4s ease-out forwards' }} />
       )}
 
-      {/* HUD */}
-      <div style={{ position: 'fixed', top: 8, right: 12, zIndex: 50, display: 'flex', alignItems: 'center', gap: 8 }}>
-        <button
-          onClick={() => setMode(m => NEXT_MODE[m])}
-          style={{
-            background: mode === 'winter' ? 'rgba(200,230,250,0.9)' : mode === 'storm' ? 'rgba(14,16,28,0.9)' : 'rgba(20,24,32,0.85)',
-            border: `1px solid ${mode === 'winter' ? '#90bcd8' : mode === 'storm' ? '#2a304a' : '#252d3a'}`,
-            borderRadius: 5, padding: '3px 10px', cursor: 'pointer',
-            fontFamily: 'monospace', fontSize: 9,
-            color: mode === 'winter' ? '#1a4060' : mode === 'storm' ? '#6080a0' : '#8896a8',
-            transition: 'all 0.3s',
-          }}
-        >{MODE_LABELS[mode]}</button>
-        <div style={{ fontFamily: 'monospace', fontSize: 11, color: mode === 'winter' ? '#4488bb' : mode === 'storm' ? '#4a6080' : '#FFE135', pointerEvents: 'none', letterSpacing: '0.1em' }}>
-          {SCORE_ICON[mode]} {score}
+      {/* ── disaster overlays ──────────────────────────────────────────── */}
+
+      {/* freeze wave — colors vary by mode */}
+      {disaster === 'freeze' && (
+        <>
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 720, pointerEvents: 'none',
+            background: mode === 'winter'
+              ? 'rgba(225,246,255,0.55)'
+              : mode === 'storm'
+              ? 'rgba(55,75,120,0.48)'
+              : 'rgba(155,198,240,0.36)',
+            animation: 'freeze-bg 6s ease-out forwards',
+          }} />
+          <div style={{
+            position: 'fixed', top: 0, left: 0, width: '50vw', height: '100vh', zIndex: 730, pointerEvents: 'none',
+            background: mode === 'winter'
+              ? 'linear-gradient(90deg,transparent,rgba(248,254,255,0.97),transparent)'
+              : mode === 'storm'
+              ? 'linear-gradient(90deg,transparent,rgba(90,120,180,0.88),transparent)'
+              : 'linear-gradient(90deg,transparent,rgba(195,228,255,0.96),transparent)',
+            animation: 'freeze-sweep 2s ease-in-out forwards',
+          }} />
+        </>
+      )}
+
+      {/* tornado — sprite is mode-aware */}
+      {disaster === 'tornado' && (
+        <div style={{ position: 'fixed', bottom: '90px', right: '-140px', zIndex: 700, pointerEvents: 'none', animation: 'tornado-move 9s linear forwards' }}>
+          <div style={{ animation: 'tornado-sway 0.32s ease-in-out infinite' }}>
+            <TornadoSprite mode={mode} />
+          </div>
         </div>
+      )}
+
+      {/* big meteorite — sprite + glow tint are mode-aware */}
+      {disaster === 'meteor' && (
+        <div style={{
+          position: 'fixed', right: '9%', top: '-12%', zIndex: 720, pointerEvents: 'none',
+          animation: 'big-meteor-fall 2.8s ease-in forwards',
+          filter: mode === 'winter'
+            ? 'drop-shadow(0 0 24px rgba(80,170,255,0.9))'
+            : mode === 'storm'
+            ? 'drop-shadow(0 0 20px rgba(140,130,230,0.85))'
+            : 'drop-shadow(0 0 30px rgba(255,130,20,0.95))',
+        }}>
+          <BigMeteoriteSprite mode={mode} />
+        </div>
+      )}
+      {impactFlash && (
+        <>
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 740, pointerEvents: 'none',
+            background: mode === 'winter' ? '#d8f0ff' : mode === 'storm' ? '#d0d0ff' : '#fff4c0',
+            animation: 'lightning-flash 0.65s ease-out forwards',
+          }} />
+          {/* primary ring */}
+          <div style={{
+            position: 'fixed', bottom: '90px', left: '41%', transform: 'translateX(-50%)',
+            width: 110, height: 110, borderRadius: '50%',
+            border: `8px solid ${mode === 'winter' ? '#60b0ff' : mode === 'storm' ? '#9090dd' : '#FF8C32'}`,
+            background: mode === 'winter' ? 'rgba(80,160,255,0.12)' : mode === 'storm' ? 'rgba(120,120,220,0.12)' : 'rgba(255,160,40,0.14)',
+            zIndex: 752, pointerEvents: 'none', animation: 'impact-ring 1.1s ease-out forwards',
+          }} />
+          {/* secondary ring */}
+          <div style={{
+            position: 'fixed', bottom: '90px', left: '41%', transform: 'translateX(-50%)',
+            width: 60, height: 60, borderRadius: '50%',
+            border: `5px solid ${mode === 'winter' ? '#a0d8ff' : mode === 'storm' ? '#b8b8ee' : '#FFD060'}`,
+            zIndex: 753, pointerEvents: 'none', animation: 'impact-ring2 0.9s ease-out forwards',
+          }} />
+        </>
+      )}
+
+      {/* HUD */}
+      <div style={{ position: 'fixed', top: 8, right: 12, zIndex: 50, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={() => setMode(m => NEXT_MODE[m])}
+            style={{
+              background: mode === 'winter' ? 'rgba(200,230,250,0.9)' : mode === 'storm' ? 'rgba(14,16,28,0.9)' : 'rgba(20,24,32,0.85)',
+              border: `1px solid ${mode === 'winter' ? '#90bcd8' : mode === 'storm' ? '#2a304a' : '#252d3a'}`,
+              borderRadius: 5, padding: '3px 10px', cursor: 'pointer',
+              fontFamily: 'monospace', fontSize: 9,
+              color: mode === 'winter' ? '#1a4060' : mode === 'storm' ? '#6080a0' : '#8896a8',
+              transition: 'all 0.3s',
+            }}
+          >{MODE_LABELS[mode]}</button>
+          <div style={{ fontFamily: 'monospace', fontSize: 11, color: mode === 'winter' ? '#4488bb' : mode === 'storm' ? '#4a6080' : '#FFE135', pointerEvents: 'none', letterSpacing: '0.1em' }}>
+            {SCORE_ICON[mode]} {score}
+          </div>
+        </div>
+        {/* disaster buttons */}
+        <div style={{ display: 'flex', gap: 4 }}>
+          {([
+            { key: 'freeze',  icon: '❄',  label: 'Freeze',  bg: 'rgba(190,225,255,0.88)', col: '#1a4060', bc: '#70aacc' },
+            { key: 'tornado', icon: '🌀', label: 'Tornado', bg: 'rgba(28,22,44,0.90)',    col: '#9080d0', bc: '#4a3878' },
+            { key: 'meteor',  icon: '☄',  label: 'Meteor',  bg: 'rgba(40,14,6,0.90)',     col: '#ff7030', bc: '#882010' },
+          ] as const).map(d => (
+            <button key={d.key}
+              onClick={() => triggerDisaster(d.key)}
+              disabled={!!disaster}
+              style={{
+                background: disaster ? 'rgba(20,22,28,0.7)' : d.bg,
+                border: `1px solid ${disaster ? '#2a2e38' : d.bc}`,
+                borderRadius: 5, padding: '2px 7px', cursor: disaster ? 'not-allowed' : 'pointer',
+                fontFamily: 'monospace', fontSize: 9,
+                color: disaster ? '#3a4050' : d.col,
+                opacity: disaster ? 0.45 : 1,
+                transition: 'all 0.25s',
+              }}
+            >{d.icon} {d.label}</button>
+          ))}
+        </div>
+        {/* respawn button — only visible when animals are corrupted */}
+        {corrupted.size > 0 && !disaster && (
+          <button
+            onClick={() => {
+              setCorrupted(new Set());
+              setMilestone('✦ ALL RESPAWNED ✦');
+              setTimeout(() => setMilestone(null), 2000);
+            }}
+            style={{
+              background: 'rgba(20,40,20,0.90)',
+              border: '1px solid #2a6a2a',
+              borderRadius: 5, padding: '2px 10px', cursor: 'pointer',
+              fontFamily: 'monospace', fontSize: 9, color: '#39FF6A',
+              transition: 'all 0.25s', alignSelf: 'flex-end',
+            }}
+          >↺ Respawn</button>
+        )}
       </div>
 
       <div style={{ position: 'fixed', top: 10, left: '50%', transform: 'translateX(-50%)', zIndex: 50, fontFamily: 'monospace', fontSize: 9, color: mode === 'winter' ? '#4a6a80' : mode === 'storm' ? '#4a5060' : '#8896a8', pointerEvents: 'none', opacity: 0.8, whiteSpace: 'nowrap' }}>
@@ -904,7 +1216,7 @@ export default function Page() {
       ))}
 
       {/* scene */}
-      <div className="relative w-full h-full overflow-hidden select-none" style={{ background: SKY, cursor: held ? 'grabbing' : 'default', transition: 'background 0.8s' }}>
+      <div className={`relative w-full h-full overflow-hidden select-none${shakeScene ? ' scene-shaking' : ''}`} style={{ background: SKY, cursor: held ? 'grabbing' : 'default', transition: 'background 0.8s' }}>
 
         {/* sky objects */}
         {mode === 'night'   && <div style={{ position: 'absolute', top: '7%', right: '9%', zIndex: 3 }}><Moon /></div>}
@@ -983,23 +1295,28 @@ export default function Page() {
         })}
 
         {/* OverOwa */}
-        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'overowa' ? 'none' : 'walk-right 18s linear infinite', opacity: held === 'overowa' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('overowa') && (
+        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'overowa' ? 'none' : 'walk-right 18s linear infinite', opacity: held === 'overowa' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div onClick={e => pickUp('overowa', e)} className={landing === 'overowa' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
             <AgentSprite id="overowa" />
             {bubbles.overowa && held !== 'overowa' && <SpeechBubble text={bubbles.overowa} />}
           </div>
         </div>
+        )}
 
         {/* Stinger */}
-        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'stinger' ? 'none' : 'walk-left 12s linear infinite', animationDelay: '-5s', opacity: held === 'stinger' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('stinger') && (
+        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'stinger' ? 'none' : 'walk-left 12s linear infinite', animationDelay: '-5s', opacity: held === 'stinger' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div onClick={e => pickUp('stinger', e)} className={landing === 'stinger' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
             <AgentSprite id="stinger" />
             {bubbles.stinger && held !== 'stinger' && <SpeechBubble text={bubbles.stinger} />}
           </div>
         </div>
+        )}
 
         {/* Firefly */}
-        <div style={{ position: 'absolute', bottom: GROUND + 22, zIndex: 20, animation: held === 'firefly' ? 'none' : 'walk-right 9s linear infinite', animationDelay: '-3s', opacity: held === 'firefly' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('firefly') && (
+        <div style={{ position: 'absolute', bottom: GROUND + 22, zIndex: 20, animation: held === 'firefly' ? 'none' : 'walk-right 9s linear infinite', animationDelay: '-3s', opacity: held === 'firefly' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div style={{ animation: held === 'firefly' ? 'none' : 'bob 0.5s ease-in-out infinite' }}>
             <div onClick={e => pickUp('firefly', e)} className={landing === 'firefly' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
               <AgentSprite id="firefly" />
@@ -1007,30 +1324,37 @@ export default function Page() {
             </div>
           </div>
         </div>
+        )}
 
         {/* Butterbear */}
-        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'bear' ? 'none' : 'walk-left 22s linear infinite', animationDelay: '-8s', opacity: held === 'bear' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('bear') && (
+        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'bear' ? 'none' : 'walk-left 22s linear infinite', animationDelay: '-8s', opacity: held === 'bear' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div onClick={e => pickUp('bear', e)} className={landing === 'bear' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
             <ButterbearSprite />
             {bubbles.bear && held !== 'bear' && <SpeechBubble text={bubbles.bear} />}
           </div>
         </div>
+        )}
 
         {/* Dog */}
-        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'dog' ? 'none' : 'walk-right 14s linear infinite', animationDelay: '-6s', opacity: held === 'dog' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('dog') && (
+        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'dog' ? 'none' : 'walk-right 14s linear infinite', animationDelay: '-6s', opacity: held === 'dog' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div onClick={e => pickUp('dog', e)} className={landing === 'dog' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
             <DogSprite />
             {bubbles.dog && held !== 'dog' && <SpeechBubble text={bubbles.dog} />}
           </div>
         </div>
+        )}
 
         {/* Cat */}
-        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'cat' ? 'none' : 'walk-left 8s linear infinite', animationDelay: '-2s', opacity: held === 'cat' ? 0 : 1, transition: 'opacity 0.12s' }}>
+        {!corrupted.has('cat') && (
+        <div style={{ position: 'absolute', bottom: GROUND, zIndex: 20, animation: held === 'cat' ? 'none' : 'walk-left 8s linear infinite', animationDelay: '-2s', opacity: held === 'cat' || mobsHidden ? 0 : 1, transition: 'opacity 0.3s' }}>
           <div onClick={e => pickUp('cat', e)} className={landing === 'cat' ? 'agent-land' : ''} style={{ cursor: 'grab', position: 'relative' }}>
             <CatSprite />
             {bubbles.cat && held !== 'cat' && <SpeechBubble text={bubbles.cat} />}
           </div>
         </div>
+        )}
 
         {/* snow on ground (winter) */}
         {mode === 'winter' && (

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { dataStore } from '@/lib/data-util';
 import { checkBotAuth } from '@/lib/auth';
+import { isValidCron, isValidISODate } from '@/lib/validate';
 
 const VALID_AGENTS = ['overowa', 'firefly', 'stinger'] as const;
 const VALID_TYPES  = ['daily', 'recurring', 'one-shot'] as const;
-const VALID_CRON   = /^(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)\s+(\*|[0-9,\-\/]+)$/;
 
 export async function POST(req: Request) {
   const denied = checkBotAuth(req);
@@ -24,7 +24,8 @@ export async function POST(req: Request) {
     if (!VALID_AGENTS.includes(agent))  return NextResponse.json({ error: 'Invalid agent — must be overowa, firefly, or stinger' }, { status: 400 });
     if (!VALID_TYPES.includes(type))    return NextResponse.json({ error: 'Invalid type — must be daily, recurring, or one-shot' }, { status: 400 });
     if (!cron)  return NextResponse.json({ error: 'Cron expression is required' }, { status: 400 });
-    if (!VALID_CRON.test(cron)) return NextResponse.json({ error: 'Invalid cron expression' }, { status: 400 });
+    if (!isValidCron(cron)) return NextResponse.json({ error: 'Invalid cron expression' }, { status: 400 });
+    if (!isValidISODate(next_run)) return NextResponse.json({ error: 'Invalid next_run date' }, { status: 400 });
 
     const data      = await dataStore.get('schedule') || { schedules: [] };
     const schedules = (data as { schedules: unknown[] }).schedules;

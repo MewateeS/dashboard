@@ -30,7 +30,7 @@ async function kvGet(key: string) {
   const kv = await getVercelKv();
   if (!kv) return null;
   try {
-    const res = await fetch(`${kv.url}/get/${key}`, {
+    const res = await fetch(`${kv.url}/get/${encodeURIComponent(key)}`, {
       headers: { Authorization: `Bearer ${kv.token}` },
     });
     if (!res.ok) return null;
@@ -45,7 +45,7 @@ async function kvSet(key: string, value: unknown) {
   const kv = await getVercelKv();
   if (!kv) return false;
   try {
-    const res = await fetch(`${kv.url}/set/${key}`, {
+    const res = await fetch(`${kv.url}/set/${encodeURIComponent(key)}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${kv.token}` },
       body: JSON.stringify({ value: JSON.stringify(value) }),
